@@ -1,0 +1,18 @@
+{
+  "name": "quran-alkareem",
+  "version": "1.0.1",
+  "private": true,
+  "description": "تطبيق القرآن الكريم الأصلي - التلاوات والإذاعات ومواقيت الصلاة والمسبحة",
+  "scripts": {
+    "android:prepare": "cap add android && cap sync android",
+    "android:sync": "cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3",
+    "@capacitor/local-notifications": "^7.0.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.3"
+  }
+}
