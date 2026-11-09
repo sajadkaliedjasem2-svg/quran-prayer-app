@@ -25,6 +25,18 @@ if "androidx.media:media" not in g:
     g = re.sub(r"(dependencies\s*\{)", r"\1\n" + dependency, g, count=1)
 gradle.write_text(g)
 
+wrapper = root / "gradle/wrapper/gradle-wrapper.properties"
+if not wrapper.exists():
+    raise SystemExit("Gradle wrapper properties file is missing")
+props = wrapper.read_text()
+props = re.sub(r"gradle-[0-9.]+-all\\.zip", "gradle-8.11.1-bin.zip", props)
+if "networkTimeout=" in props:
+    props = re.sub(r"networkTimeout=\\d+", "networkTimeout=180000", props)
+else:
+    props += "\\nnetworkTimeout=180000\\n"
+wrapper.write_text(props)
+print("Configured Gradle wrapper: binary distribution, 180-second timeout")
+
 java_dir = root / "app/src/main/java/com/sajad/quranalkareem"
 java_dir.mkdir(parents=True, exist_ok=True)
 (java_dir / "MainActivity.java").write_text(r'''package com.sajad.quranalkareem;
