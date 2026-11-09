@@ -49,6 +49,9 @@ jobs:
           PY
       - name: Configure native media playback notification
         run: python3 scripts/setup-native-media.py
+      - name: Set up Gradle cache
+        uses: gradle/actions/setup-gradle@v4
+
       - name: Build debug APK
         working-directory: android
         run: ./gradlew assembleDebug
