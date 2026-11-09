@@ -47,6 +47,8 @@ jobs:
                   end = s.index('>', s.index('<manifest')) + 1
           p.write_text(s)
           PY
+      - name: Configure native media playback notification
+        run: python3 scripts/setup-native-media.py
       - name: Build debug APK
         working-directory: android
         run: ./gradlew assembleDebug
