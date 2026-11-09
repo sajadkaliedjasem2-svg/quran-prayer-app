@@ -56,6 +56,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import com.getcapacitor.*;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
 @CapacitorPlugin(name = "QuranMedia")
 public class QuranMediaPlugin extends Plugin {
