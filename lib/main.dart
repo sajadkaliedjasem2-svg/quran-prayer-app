@@ -28,7 +28,7 @@ class _HomeState extends State<Home>{
  NavigationDestination(icon:Icon(Icons.radio_outlined),selectedIcon:Icon(Icons.radio),label:'الإذاعات'),
  NavigationDestination(icon:Icon(Icons.mosque_outlined),selectedIcon:Icon(Icons.mosque),label:'الصلاة'),
  NavigationDestination(icon:Icon(Icons.fingerprint),selectedIcon:Icon(Icons.fingerprint),label:'المسبحة')
- ]));
+ ])));
  }
 }
 Widget glass({required Widget child,EdgeInsets padding=const EdgeInsets.all(16)})=>Container(width:double.infinity,padding:padding,decoration:BoxDecoration(color:const Color(0xCC10382D),borderRadius:BorderRadius.circular(20),border:Border.all(color:Colors.white.withOpacity(.10)),boxShadow:[BoxShadow(color:Colors.black.withOpacity(.18),blurRadius:18,offset:const Offset(0,7))]),child:child);
