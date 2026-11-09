@@ -53,7 +53,9 @@ public class QuranMediaPlugin extends Plugin {
   @Override public void load() {
     receiver = new BroadcastReceiver() {
       @Override public void onReceive(Context context, Intent intent) {
-        JSObject data = new JSObject();\n        data.put("action", intent.getStringExtra("action"));\n        notifyListeners("mediaAction", data);
+        JSObject data = new JSObject();
+        data.put("action", intent.getStringExtra("action"));
+        notifyListeners("mediaAction", data);
       }
     };
     IntentFilter filter = new IntentFilter("com.sajad.quranalkareem.MEDIA_ACTION");
@@ -151,7 +153,7 @@ public class QuranPlaybackService extends Service {
     Intent i = new Intent(this, QuranPlaybackService.class).setAction(action);
     return PendingIntent.getService(this, request, i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
   }
-  private void updateNotification() { getSystemService(NotificationManager.class).notify(NOTIFICATION_ID, buildNotification()); }\n  private Notification buildNotification() {
+  private void updateNotification() { getSystemService(NotificationManager.class).notify(NOTIFICATION_ID, buildNotification()); }\n  private void updateNotification() { getSystemService(NotificationManager.class).notify(NOTIFICATION_ID, buildNotification()); }\n  private Notification buildNotification() {
     Intent launch = getPackageManager().getLaunchIntentForPackage(getPackageName());
     PendingIntent content = launch == null ? null : PendingIntent.getActivity(this, 0, launch, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     NotificationCompat.Builder b = new NotificationCompat.Builder(this, CHANNEL)
