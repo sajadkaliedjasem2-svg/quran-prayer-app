@@ -203,6 +203,11 @@ async function startQuranMediaNotification(){
  const plugin=window.Capacitor?.Plugins?.QuranMedia;
  if(!plugin){document.getElementById("quranNow").textContent+=" — إشعار التحكم متاح في نسخة APK";return;}
  try{
+  const local=window.Capacitor?.Plugins?.LocalNotifications;
+  if(local){
+   let permission=await local.checkPermissions();
+   if(permission.display!=="granted")await local.requestPermissions();
+  }
   await plugin.start({title:"سورة "+surahs[currentSurah],artist:reciters[currentReciter].name});
  }catch(e){console.warn("Native media notification unavailable",e);}
 }
