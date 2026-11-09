@@ -1,59 +1,130 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:just_audio/just_audio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-void main() => runApp(const QuranApp());
-const bg=Color(0xFF061A16), green=Color(0xFF0E3B2E), mint=Color(0xFF35C99A), gold=Color(0xFFE8CC85);
-const surahServers=['https://server7.mp3quran.net/download/basit/','https://server11.mp3quran.net/download/yasser/','https://server12.mp3quran.net/download/maher/'];
-const reciters=['عبد الباسط عبد الصمد','ياسر الدوسري','ماهر المعيقلي'];
-const radioNames=['الشيخ عبد الباسط عبد الصمد','الشيخ الزين محمد أحمد','الشيخ الفتاح محمد الزبير','الشيخ القارئ ياسين','الشيخ أحمد الحواشي','الشيخ أحمد الطرابلسي','الشيخ أحمد العجمي','الشيخ أحمد خليل شاهين','الشيخ أحمد صابر','الشيخ طالب بن حميد','الشيخ أحمد عامر'];
-const radioUrls=['abdulbasit_abdulsamad','alzain_mohammad_ahmad','alfateh_alzubair','alqaria_yassen','ahmad_alhawashi','ahmed_altrabulsi','ahmad_alajmy','ahmad_shaheen','ahmad_saber','a_binhameed','ahmed_amer'];
-String pad3(int n)=>n.toString().padLeft(3,'0');
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const QuranOriginalApp());
+}
 
-class QuranApp extends StatelessWidget{const QuranApp({super.key});@override Widget build(BuildContext context)=>MaterialApp(debugShowCheckedModeBanner:false,title:'القرآن الكريم',theme:ThemeData(useMaterial3:true,brightness:Brightness.dark,scaffoldBackgroundColor:bg,colorScheme:ColorScheme.fromSeed(seedColor:mint,brightness:Brightness.dark)),home:const Home());}
-class Home extends StatefulWidget{const Home({super.key});@override State<Home> createState()=>_HomeState();}
-class _HomeState extends State<Home>{
- int index=0; final player=AudioPlayer();
- @override void dispose(){player.dispose();super.dispose();}
- @override Widget build(BuildContext context){
- final pages=[Dashboard(onOpen:(i)=>setState(()=>index=i)),Recitations(player:player),Radios(player:player),const PrayerPage(),const TasbeehPage()];
- return Directionality(textDirection:TextDirection.rtl,child:Scaffold(body:SafeArea(child:Column(children:[
- Padding(padding:const EdgeInsets.fromLTRB(18,14,18,8),child:Row(children:[Container(width:44,height:44,decoration:BoxDecoration(color:mint.withOpacity(.15),borderRadius:BorderRadius.circular(15),border:Border.all(color:gold.withOpacity(.5))),child:const Icon(Icons.menu_book_rounded,color:gold)),const SizedBox(width:12),const Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('القرآن الكريم',style:TextStyle(fontSize:21,fontWeight:FontWeight.bold)),Text('نورٌ لقلوبكم',style:TextStyle(color:Colors.white60,fontSize:12))])),IconButton(onPressed:()=>setState(()=>index=4),icon:const Icon(Icons.more_horiz,color:gold))])),
- Expanded(child:IndexedStack(index:index,children:pages))
- ])),bottomNavigationBar:NavigationBar(backgroundColor:const Color(0xFF0B2921),indicatorColor:mint.withOpacity(.18),selectedIndex:index,onDestinationSelected:(v)=>setState(()=>index=v),destinations:const[
- NavigationDestination(icon:Icon(Icons.home_outlined),selectedIcon:Icon(Icons.home),label:'الرئيسية'),
- NavigationDestination(icon:Icon(Icons.headphones_outlined),selectedIcon:Icon(Icons.headphones),label:'التلاوات'),
- NavigationDestination(icon:Icon(Icons.radio_outlined),selectedIcon:Icon(Icons.radio),label:'الإذاعات'),
- NavigationDestination(icon:Icon(Icons.mosque_outlined),selectedIcon:Icon(Icons.mosque),label:'الصلاة'),
- NavigationDestination(icon:Icon(Icons.fingerprint),selectedIcon:Icon(Icons.fingerprint),label:'المسبحة')
- ])));
- }
+class QuranOriginalApp extends StatelessWidget {
+  const QuranOriginalApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'القرآن الكريم',
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: const Color(0xFF07131C),
+      ),
+      home: const OriginalInterface(),
+    );
+  }
 }
-Widget glass({required Widget child,EdgeInsets padding=const EdgeInsets.all(16)})=>Container(width:double.infinity,padding:padding,decoration:BoxDecoration(color:const Color(0xCC10382D),borderRadius:BorderRadius.circular(20),border:Border.all(color:Colors.white.withOpacity(.10)),boxShadow:[BoxShadow(color:Colors.black.withOpacity(.18),blurRadius:18,offset:const Offset(0,7))]),child:child);
-class Dashboard extends StatelessWidget{final ValueChanged<int> onOpen;const Dashboard({super.key,required this.onOpen});@override Widget build(BuildContext context)=>ListView(padding:const EdgeInsets.all(16),children:[
- glass(child:const Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا',style:TextStyle(fontSize:23,color:gold,fontWeight:FontWeight.bold)),SizedBox(height:8),Text('اجعل القرآن رفيق يومك',style:TextStyle(color:Colors.white70))])),
- const SizedBox(height:18),const Text('أقسام التطبيق',style:TextStyle(fontSize:19,fontWeight:FontWeight.bold)),const SizedBox(height:10),
- ...[('تلاوات القرآن الكريم','استمع إلى تلاوات كبار القرّاء',Icons.menu_book,1),('إذاعات القرآن المباشرة','11 إذاعة قرآنية',Icons.radio,2),('مواقيت الصلاة','اختر المدينة وطريقة الحساب',Icons.mosque,3),('المسبحة الإلكترونية','سبّح واحفظ عدّادك',Icons.fingerprint,4)].map((e)=>Padding(padding:const EdgeInsets.only(bottom:10),child:InkWell(borderRadius:BorderRadius.circular(20),onTap:()=>onOpen(e.$4),child:glass(child:Row(children:[Container(width:48,height:48,decoration:BoxDecoration(color:mint.withOpacity(.13),borderRadius:BorderRadius.circular(15)),child:Icon(e.$3,color:gold,size:27)),const SizedBox(width:13),Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(e.$1,style:const TextStyle(fontSize:17,fontWeight:FontWeight.bold)),Text(e.$2,style:const TextStyle(color:Colors.white60,fontSize:12))])),const Icon(Icons.chevron_left,color:gold)])))))
- ]);}
-class Recitations extends StatefulWidget{final AudioPlayer player;const Recitations({super.key,required this.player});@override State<Recitations> createState()=>_RecitationsState();}
-class _RecitationsState extends State<Recitations>{
- int reciter=0;List<dynamic> surahs=[];bool loading=true;String query='';int? playing;
- @override void initState(){super.initState();load();}
- Future<void> load()async{try{final r=await http.get(Uri.parse('https://api.alquran.cloud/v1/surah')).timeout(const Duration(seconds:20));if(r.statusCode==200)surahs=jsonDecode(r.body)['data'];}catch(_){}if(mounted)setState(()=>loading=false);}
- Future<void> play(int n)async{final url=surahServers[reciter]+pad3(n)+'.mp3';try{await widget.player.setUrl(url);await widget.player.play();setState(()=>playing=n);}catch(_){if(mounted)ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text('تعذر تشغيل التلاوة، تحقق من الإنترنت')));}}
- @override Widget build(BuildContext context)=>Column(children:[
- Padding(padding:const EdgeInsets.fromLTRB(16,8,16,8),child:glass(child:Column(children:[const Text('اختر القارئ',style:TextStyle(fontWeight:FontWeight.bold,fontSize:18)),const SizedBox(height:10),Wrap(spacing:7,children:List.generate(3,(i)=>ChoiceChip(label:Text(reciters[i]),selected:reciter==i,onSelected:(_){setState(()=>reciter=i);widget.player.stop();playing=null;})))]))),
- Padding(padding:const EdgeInsets.symmetric(horizontal:16,vertical:5),child:TextField(onChanged:(v)=>setState(()=>query=v),decoration:InputDecoration(hintText:'ابحث عن سورة',prefixIcon:const Icon(Icons.search),filled:true,fillColor:green,border:OutlineInputBorder(borderRadius:BorderRadius.circular(15),borderSide:BorderSide.none)))),
- Expanded(child:loading?const Center(child:CircularProgressIndicator()):surahs.isEmpty?const Center(child:Text('تعذر تحميل قائمة السور')):ListView.builder(padding:const EdgeInsets.all(14),itemCount:surahs.where((s)=>s['name'].toString().contains(query)).length,itemBuilder:(c,i){final s=surahs.where((s)=>s['name'].toString().contains(query)).toList()[i];final n=s['number'] as int;return Padding(padding:const EdgeInsets.only(bottom:8),child:glass(padding:const EdgeInsets.symmetric(horizontal:12,vertical:9),child:Row(children:[Text('$n',style:const TextStyle(color:gold)),const SizedBox(width:12),Expanded(child:Text(s['name'],style:const TextStyle(fontSize:17))),IconButton(onPressed:()=>play(n),icon:Icon(playing==n?Icons.graphic_eq:Icons.play_circle_fill,color:gold,size:30))])));} ))
- ]);
+
+class OriginalInterface extends StatefulWidget {
+  const OriginalInterface({super.key});
+
+  @override
+  State<OriginalInterface> createState() => _OriginalInterfaceState();
 }
-class Radios extends StatefulWidget{final AudioPlayer player;const Radios({super.key,required this.player});@override State<Radios> createState()=>_RadiosState();}
-class _RadiosState extends State<Radios>{int? active;Future<void> play(int i)async{try{await widget.player.setUrl('https://backup.qurango.net/radio/${radioUrls[i]}');await widget.player.play();setState(()=>active=i);}catch(_){if(mounted)ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text('تعذر الاتصال بهذه الإذاعة حالياً')));}}@override Widget build(BuildContext context)=>Column(children:[glass(child:Column(children:[Text(active==null?'لا توجد إذاعة مشغّلة حالياً':'يُبث الآن: ${radioNames[active!]}',style:const TextStyle(color:gold,fontWeight:FontWeight.bold)),const SizedBox(height:8),StreamBuilder<PlayerState>(stream:widget.player.playerStateStream,builder:(c,s)=>IconButton(iconSize:42,color:gold,onPressed:()=>s.data?.playing==true?widget.player.pause():widget.player.play(),icon:Icon(s.data?.playing==true?Icons.pause_circle:Icons.play_circle)))])),Expanded(child:ListView.builder(padding:const EdgeInsets.all(14),itemCount:radioNames.length,itemBuilder:(c,i)=>Padding(padding:const EdgeInsets.only(bottom:8),child:InkWell(onTap:()=>play(i),child:glass(child:Row(children:[const Icon(Icons.radio,color:gold),const SizedBox(width:12),Expanded(child:Text(radioNames[i],style:const TextStyle(fontWeight:FontWeight.bold))),if(active==i)const Icon(Icons.equalizer,color:mint)else const Icon(Icons.play_arrow)]))))))]);}
-class PrayerPage extends StatefulWidget{const PrayerPage({super.key});@override State<PrayerPage> createState()=>_PrayerPageState();}
-class _PrayerPageState extends State<PrayerPage>{bool jaafari=true,loading=false;String city='Baghdad';Map<String,dynamic>? times;final ctrl=TextEditingController(text:'Baghdad');final labels={'Fajr':'الفجر','Sunrise':'الشروق','Dhuhr':'الظهر','Asr':'العصر','Maghrib':'المغرب','Isha':'العشاء'};@override void initState(){super.initState();fetch();}
-Future<void> fetch()async{setState(()=>loading=true);try{final uri=Uri.https('api.aladhan.com','/v1/timingsByCity',{'city':city,'country':'Iraq','method':jaafari?'0':'3'});final r=await http.get(uri).timeout(const Duration(seconds:20));final d=jsonDecode(r.body);if(r.statusCode!=200||d['code']!=200)throw Exception();times=d['data']['timings'];}catch(_){times=null;}if(mounted)setState(()=>loading=false);}
-@override Widget build(BuildContext context)=>ListView(padding:const EdgeInsets.all(16),children:[glass(child:Column(children:[const Text('مواقيت الصلاة',style:TextStyle(fontSize:21,fontWeight:FontWeight.bold)),const SizedBox(height:10),SegmentedButton<bool>(segments:const[ButtonSegment(value:true,label:Text('جعفري')),ButtonSegment(value:false,label:Text('سني'))],selected:{jaafari},onSelectionChanged:(v){setState(()=>jaafari=v.first);fetch();}),TextField(controller:ctrl,decoration:const InputDecoration(labelText:'المدينة في العراق',suffixIcon:Icon(Icons.location_city)),onSubmitted:(v){city=v.trim();fetch();}),Align(alignment:Alignment.centerLeft,child:TextButton.icon(onPressed:(){city=ctrl.text.trim();fetch();},icon:const Icon(Icons.refresh),label:const Text('تحديث')))])),const SizedBox(height:12),if(loading)const Center(child:CircularProgressIndicator()),if(!loading&&times==null)glass(child:const Text('تعذر جلب المواقيت. تحقق من الإنترنت واسم المدينة.',textAlign:TextAlign.center)),if(times!=null)...labels.entries.map((e)=>Padding(padding:const EdgeInsets.only(bottom:8),child:glass(child:Row(children:[const Icon(Icons.access_time,color:mint),const SizedBox(width:12),Expanded(child:Text(e.value,style:const TextStyle(fontSize:17))),Text(times![e.key]?.toString()??'--:--',style:const TextStyle(color:gold,fontWeight:FontWeight.bold,fontSize:18))])))),const Text('تُجلب الأوقات عبر خدمة الحساب الفلكي؛ راجع التقويم المحلي المعتمد في منطقتك.',style:TextStyle(color:Colors.white54,fontSize:11))]);}
-class TasbeehPage extends StatefulWidget{const TasbeehPage({super.key});@override State<TasbeehPage> createState()=>_TasbeehPageState();}
-class _TasbeehPageState extends State<TasbeehPage>{int count=0;static const phrases=['سبحان الله','الحمد لله','الله أكبر'];@override void initState(){super.initState();restore();}Future<void> restore()async{final p=await SharedPreferences.getInstance();if(mounted)setState(()=>count=p.getInt('tasbeehCount')??0);}Future<void> save()async{final p=await SharedPreferences.getInstance();await p.setInt('tasbeehCount',count);}void increment(){setState(()=>count=count>=100?0:count+1);save();}void reset(){setState(()=>count=0);save();}@override Widget build(BuildContext context)=>Center(child:Padding(padding:const EdgeInsets.all(22),child:glass(child:Column(mainAxisSize:MainAxisSize.min,children:[const Text('المسبحة الإلكترونية',style:TextStyle(color:Colors.white70,fontWeight:FontWeight.bold)),const SizedBox(height:12),Text(phrases[count<33?0:count<66?1:2],style:const TextStyle(color:gold,fontSize:27,fontWeight:FontWeight.bold)),Text('$count',style:const TextStyle(fontSize:68,fontWeight:FontWeight.bold)),SizedBox(width:double.infinity,height:112,child:FilledButton.icon(style:FilledButton.styleFrom(backgroundColor:mint,foregroundColor:bg,shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(18))),onPressed:increment,icon:const Icon(Icons.touch_app),label:const Text('اضغط للتسبيح',style:TextStyle(fontSize:22,fontWeight:FontWeight.bold)))),const SizedBox(height:12),TextButton.icon(onPressed:reset,icon:const Icon(Icons.refresh),label:const Text('إعادة ضبط')),const Text('الحد الأقصى: 100 تسبيحة ثم يبدأ من جديد',style:TextStyle(color:Colors.white54,fontSize:11))]))));}
+
+class _OriginalInterfaceState extends State<OriginalInterface> {
+  late final WebViewController controller;
+  bool loading = true;
+  String? loadError;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0xFF07131C))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (_) {
+            if (mounted) setState(() {
+              loading = true;
+              loadError = null;
+            });
+          },
+          onPageFinished: (_) {
+            if (mounted) setState(() => loading = false);
+          },
+          onWebResourceError: (error) {
+            if (error.isForMainFrame == true && mounted) {
+              setState(() {
+                loading = false;
+                loadError = error.description;
+              });
+            }
+          },
+        ),
+      )
+      ..loadFlutterAsset('assets/quran_alkareem_glass.html');
+  }
+
+  Future<bool> _handleBack() async {
+    if (await controller.canGoBack()) {
+      await controller.goBack();
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (!didPop && await controller.canGoBack()) {
+            await controller.goBack();
+          } else if (!didPop && mounted) {
+            // The HTML app handles its own section navigation.
+          }
+        },
+        child: Scaffold(
+          body: SafeArea(
+            child: Stack(
+              children: [
+                WebViewWidget(controller: controller),
+                if (loading)
+                  const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xFF55E5ED),
+                    ),
+                  ),
+                if (loadError != null)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.wifi_off, size: 42),
+                          const SizedBox(height: 12),
+                          const Text(
+                            'تعذر فتح واجهة التطبيق',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(loadError!, textAlign: TextAlign.center),
+                          const SizedBox(height: 16),
+                          FilledButton(
+                            onPressed: () => controller.reload(),
+                            child: const Text('إعادة المحاولة'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
