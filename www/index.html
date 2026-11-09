@@ -8,25 +8,25 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap');
 :root{
- --bg:#061811;--glass:rgba(255,255,255,.075);--glass2:rgba(255,255,255,.12);
- --line:rgba(190,230,207,.17);--cyan:#75d6b2;--mint:#9ce2c5;--gold:#e8cf86;
- --text:#f2f8f2;--muted:#a8bcb1;--shadow:0 18px 50px rgba(0,0,0,.34);
+ --bg:#04150d;--glass:rgba(239,247,226,.085);--glass2:rgba(239,247,226,.14);
+ --line:rgba(221,196,124,.25);--cyan:#e6c978;--mint:#c8dfbd;--gold:#f2d58b;
+ --text:#fbf8ed;--muted:#bdc9b7;--shadow:0 18px 50px rgba(0,0,0,.38);
 }
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;color:var(--text);font-family:"Cairo",Tahoma,sans-serif;
- background:radial-gradient(ellipse at 15% 10%,rgba(38,139,94,.24),transparent 38%),
- radial-gradient(ellipse at 90% 35%,rgba(154,132,61,.13),transparent 40%),
- linear-gradient(145deg,#04110c,#0b2419 55%,#061811);background-attachment:fixed}
+ background:radial-gradient(ellipse at 12% 8%,rgba(34,132,78,.34),transparent 40%),
+ radial-gradient(ellipse at 88% 32%,rgba(191,151,65,.18),transparent 42%),
+ linear-gradient(145deg,#031009,#0a2b1b 52%,#06180f);background-attachment:fixed}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.10;
  background-image:linear-gradient(30deg,transparent 48%,rgba(255,255,255,.12) 49%,transparent 50%);background-size:34px 34px}
 button,input,select{font:inherit}
 button{cursor:pointer}
 .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
- padding:13px 18px;background:rgba(5,18,27,.78);backdrop-filter:blur(22px);border-bottom:1px solid var(--line)}
+ padding:13px 18px;background:rgba(4,20,12,.84);backdrop-filter:blur(22px);border-bottom:1px solid var(--line)}
 .brand{font-size:22px;font-weight:900;letter-spacing:.2px}
 .iconbtn{width:44px;height:44px;border:1px solid var(--line);border-radius:15px;background:var(--glass);color:white;font-size:24px}
 .drawer{display:none;position:fixed;z-index:30;top:70px;right:12px;width:min(290px,85vw);padding:12px;
- border:1px solid var(--line);border-radius:20px;background:rgba(8,25,36,.96);backdrop-filter:blur(22px);box-shadow:var(--shadow)}
+ border:1px solid var(--line);border-radius:20px;background:rgba(5,27,17,.97);backdrop-filter:blur(22px);box-shadow:var(--shadow)}
 .drawer.open{display:block}.drawer button{display:block;width:100%;text-align:right;padding:12px;border:0;border-radius:12px;color:white;background:transparent}
 .drawer button:hover{background:var(--glass2)}
 main{width:min(100%,850px);margin:auto;padding:22px 16px 50px}
@@ -40,7 +40,7 @@ body.home-no-scroll{height:100dvh;overflow:hidden}
 body.home-no-scroll main{height:calc(100dvh - 70px - env(safe-area-inset-bottom));overflow:hidden;padding:clamp(7px,1.2vh,12px) 12px 7px}
 body.home-no-scroll #home{height:100%;display:flex;flex-direction:column;min-height:0;overflow:hidden}
 .home-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:clamp(7px,1.25vh,13px);width:100%;max-width:720px;min-height:0;flex:1;margin:0 auto}
-.home-card{position:relative;display:block;min-width:0;min-height:0;overflow:hidden;padding:0;border:1px solid rgba(206,235,219,.25);border-radius:clamp(15px,2.3vh,24px);background:linear-gradient(145deg,#123b2b,#092218);box-shadow:0 12px 28px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.18);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);color:#fff;text-align:center;transition:transform .18s,border-color .18s}
+.home-card{position:relative;display:block;min-width:0;min-height:0;overflow:hidden;padding:0;border:1px solid rgba(206,235,219,.25);border-radius:clamp(15px,2.3vh,24px);background:linear-gradient(145deg,#174b30,#092517);box-shadow:0 12px 28px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.18);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);color:#fff;text-align:center;transition:transform .18s,border-color .18s}
 .home-card:active{transform:scale(.975);border-color:var(--gold)}
 .home-card .pic{position:absolute;inset:0;width:100%;height:100%;margin:0;border:0;border-radius:inherit;background:transparent;overflow:hidden}
 .home-card .pic img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
@@ -55,24 +55,24 @@ body.home-no-scroll #home{height:100%;display:flex;flex-direction:column;min-hei
  border-radius:20px;padding:16px;box-shadow:var(--shadow);backdrop-filter:blur(18px)}
 .reciter-tabs{display:flex;gap:8px;overflow:auto;padding:3px 1px 12px}
 .pill{white-space:nowrap;border:1px solid var(--line);background:var(--glass);color:white;border-radius:30px;padding:9px 14px}
-.pill.active{background:linear-gradient(90deg,#167b89,#27a7ae);border-color:#5bdde2}
+.pill.active{background:linear-gradient(110deg,#9b7932,#d7b969);border-color:#f0d98f}
 .search{width:100%;padding:13px 15px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.18);color:white;outline:none;margin:8px 0 14px}
 .search::placeholder{color:#9bb0bb}
 .surah-list{display:grid;gap:9px}
 .surah{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 13px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.055)}
 .surah strong{font-size:15px}.surah small{color:var(--muted);display:block}
-.surah button{border:1px solid rgba(85,229,237,.35);background:rgba(85,229,237,.12);color:var(--cyan);border-radius:11px;padding:8px 12px}
+.surah button{border:1px solid rgba(224,195,112,.38);background:rgba(224,195,112,.13);color:var(--gold);border-radius:11px;padding:8px 12px}
 .audio-dock{position:sticky;bottom:10px;margin-top:14px;padding:13px;border:1px solid var(--line);border-radius:18px;background:rgba(4,18,27,.93);backdrop-filter:blur(20px);box-shadow:var(--shadow)}
 .audio-dock .now{font-size:13px;color:var(--cyan);margin-bottom:7px}
 audio{width:100%;height:40px}
 .radio-list{display:grid;gap:10px}.radio-btn{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:right;
  border:1px solid var(--line);border-radius:15px;padding:14px;background:var(--glass);color:white}
-.radio-btn.active{background:linear-gradient(90deg,rgba(20,132,157,.6),rgba(60,190,193,.25));border-color:var(--cyan)}
+.radio-btn.active{background:linear-gradient(90deg,rgba(150,115,43,.5),rgba(205,176,99,.18));border-color:var(--gold)}
 .field{display:grid;gap:6px;margin:10px 0;color:var(--muted);font-size:14px}
 select{width:100%;padding:12px;border:1px solid var(--line);border-radius:13px;background:#102a38;color:white}
 .row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1}
 .action{border:1px solid var(--line);border-radius:13px;padding:11px 15px;color:white;background:var(--glass)}
-.action.primary{background:linear-gradient(90deg,#137f8c,#26b6b7);color:#03171c;font-weight:800}
+.action.primary{background:linear-gradient(110deg,#a48239,#e0c779);color:#172013;font-weight:900}
 .prayer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:14px}
 .prayer{padding:14px;border-radius:15px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
 .prayer span{display:block;color:var(--muted);font-size:13px}.prayer strong{font-size:21px;color:var(--mint)}
@@ -81,8 +81,8 @@ select{width:100%;padding:12px;border:1px solid var(--line);border-radius:13px;b
 .tasbeeh{text-align:center;max-width:440px;margin:20px auto}
 .phrase{font-family:"Amiri",serif;color:var(--cyan);font-size:32px;font-weight:bold;margin:8px}
 .count{font-size:76px;font-weight:900;line-height:1.3;font-variant-numeric:tabular-nums}
-.tap{width:100%;height:112px;border:1px solid rgba(255,255,255,.2);border-radius:20px;background:linear-gradient(145deg,#176d80,#16a8b6);
- color:#03171c;font-size:23px;font-weight:900;box-shadow:0 14px 35px #0008}
+.tap{width:100%;height:112px;border:1px solid rgba(255,255,255,.2);border-radius:20px;background:linear-gradient(145deg,#176b43,#c4a452);
+ color:#101b12;font-size:23px;font-weight:900;box-shadow:0 14px 35px #0008}
 .tas-controls{display:flex;gap:9px;margin-top:12px}.tas-controls button{flex:1}
 .footer{text-align:center;color:#7f9aa8;font-size:12px;padding:24px 0 0}
 @media(min-width:600px){.home-card .pic{height:170px}.home-card strong{font-size:20px}.home-grid{gap:22px}}
@@ -193,23 +193,23 @@ function renderSurahs(){
 }
 function filterSurahs(){const v=document.getElementById("surahSearch").value.trim();document.querySelectorAll(".surah").forEach(x=>x.style.display=x.dataset.name.includes(v)?"flex":"none");}
 async function notifyQuranPlayback(){
- const r=reciters[currentReciter];
- const body=`يُتلى الآن: ${r.name} — سورة ${surahs[currentSurah]}`;
+ const r=reciters[currentReciter],body=`يُتلى الآن: ${r.name} — سورة ${surahs[currentSurah]}`;
+ const local=window.Capacitor?.Plugins?.LocalNotifications;
+ if(!local)return;
  try{
-  const local=window.Capacitor?.Plugins?.LocalNotifications;
-  if(local){
-   const permission=await local.checkPermissions();
-   if(permission.display!=="granted")return;
-   await local.schedule({notifications:[{id:9001,title:"القرآن الكريم",body,schedule:{at:new Date(Date.now()+1200)}}]});
-  }else if("Notification" in window && Notification.permission==="granted"){
-   new Notification("القرآن الكريم",{body});
-  }
+  let permission=await local.checkPermissions();
+  if(permission.display!=="granted")permission=await local.requestPermissions();
+  if(permission.display!=="granted")return;
+  try{await local.createChannel({id:"quran-playback",name:"إشعار التلاوة",description:"يعرض القارئ والسورة التي تعمل حالياً",importance:3,visibility:1,vibration:false});}catch(e){}
+  try{await local.cancel({notifications:[{id:9001}]});}catch(e){}
+  await local.schedule({notifications:[{id:9001,title:"القرآن الكريم",body,schedule:{at:new Date(Date.now()+700)},ongoing:true,autoCancel:false,channelId:"quran-playback"}]});
  }catch(e){console.warn("Playback notification unavailable",e);}
 }
 function playSurah(i){currentSurah=i;const r=reciters[currentReciter];quranPlayer.src=r.base+String(i+1).padStart(3,"0")+".mp3";
  document.getElementById("quranNow").textContent=`يُتلى الآن: ${r.name} — سورة ${surahs[i]}`;
  quranPlayer.play().catch(()=>{document.getElementById("quranNow").textContent+=" (اضغط تشغيل إذا لم يبدأ تلقائياً)";});}
 quranPlayer.addEventListener("play",notifyQuranPlayback);
+quranPlayer.addEventListener("pause",()=>{if(!quranPlayer.ended){const local=window.Capacitor?.Plugins?.LocalNotifications;local?.cancel({notifications:[{id:9001}] }).catch(()=>{});}});
 quranPlayer.addEventListener("ended",()=>{if(currentSurah<113)playSurah(currentSurah+1);});
 document.getElementById("surahSearch").addEventListener("input",filterSurahs);
 document.querySelectorAll("[data-reciter]").forEach(b=>b.addEventListener("click",()=>{
@@ -292,16 +292,31 @@ function updateNextPrayer(){
  document.getElementById("nextPrayer").textContent=`الصلاة القادمة: ${next[0]} بعد ${hh} س ${mm} د ${ss} ث`;
 }
 async function schedulePrayerNotifications(){
- const local=window.Capacitor?.Plugins?.LocalNotifications;if(!local||!prayerTimes)return false;
- const permission=await local.checkPermissions();if(permission.display!=="granted")return false;
- const ids=[1101,1102,1103,1104,1105];try{await local.cancel({notifications:ids.map(id=>({id}))});}catch(e){}
+ const local=window.Capacitor?.Plugins?.LocalNotifications;
+ if(!local||!prayerTimes)throw new Error("خدمة الإشعارات الأصلية غير متاحة أو لم تُحمّل المواقيت");
+ let permission=await local.checkPermissions();
+ if(permission.display!=="granted")permission=await local.requestPermissions();
+ if(permission.display!=="granted")throw new Error("لم يتم منح إذن الإشعارات");
+ try{
+  const exact=await local.checkExactNotificationSetting();
+  if(exact.exactAlarm!=="granted")await local.changeExactNotificationSetting();
+ }catch(e){console.warn("Exact alarm permission:",e);}
+ try{
+  await local.createChannel({id:"prayer-alerts",name:"تنبيهات الصلاة",description:"تنبيه عند دخول وقت كل صلاة",importance:5,visibility:1,vibration:true});
+ }catch(e){}
+ const ids=[1101,1102,1103,1104,1105];
+ try{await local.cancel({notifications:ids.map(id=>({id}))});}catch(e){}
  const notifications=prayerNames.filter(x=>x[1]!=="Sunrise").map(([ar,en],i)=>{
   const [hour,minute]=cleanTime(prayerTimes[en]).split(":").map(Number);
-  return {id:ids[i],title:"حان وقت صلاة "+ar,body:"حيّ على الصلاة — "+selectedAdhan().name,schedule:{on:{hour,minute},every:"day",allowWhileIdle:true}};
+  const at=new Date();at.setHours(hour,minute,0,0);
+  if(at<=new Date())at.setDate(at.getDate()+1);
+  return {id:ids[i],title:"حان وقت صلاة "+ar,body:"حيّ على الصلاة — "+selectedAdhan().name,schedule:{at,repeats:true,allowWhileIdle:true},channelId:"prayer-alerts"};
  });
- await local.schedule({notifications});
- document.getElementById("prayerStatus").textContent="تم جدولة إشعارات الصلاة اليومية. صوت الأذان المختار يعمل عند التجربة وعند حلول الصلاة إذا كان التطبيق مفتوحاً.";
- return true;
+ const result=await local.schedule({notifications});
+ localStorage.setItem("prayerNotificationsEnabled","1");
+ const pending=await local.getPending();
+ document.getElementById("prayerStatus").textContent="تم تفعيل "+(pending.notifications?.filter(n=>ids.includes(n.id)).length||notifications.length)+" تنبيهات يومية فعلية على الهاتف. ستعمل والتطبيق مغلق بعد السماح بالتنبيهات الدقيقة.";
+ return result;
 }
 function checkPrayerAlerts(){
  if(!prayerTimes)return;
@@ -321,10 +336,8 @@ function checkPrayerAlerts(){
 }
 document.getElementById("notifyBtn").onclick=async()=>{
  try{
-  const local=window.Capacitor?.Plugins?.LocalNotifications;if(!local){document.getElementById("prayerStatus").textContent="إشعارات Android تحتاج نسخة التطبيق المثبتة.";return;}
-  const p=await local.requestPermissions();if(p.display!=="granted"){document.getElementById("prayerStatus").textContent="لم يتم السماح بالإشعارات من إعدادات الهاتف.";return;}
-  localStorage.setItem("prayerNotificationsEnabled","1");
-  if(prayerTimes)await schedulePrayerNotifications();else document.getElementById("prayerStatus").textContent="تم السماح بالإشعارات. حدّد موقعك أولاً لجلب المواقيت ثم فعّل الجدولة.";
+  const local=window.Capacitor?.Plugins?.LocalNotifications;if(!local){document.getElementById("prayerStatus").textContent="هذه الميزة تعمل من نسخة APK المثبتة، وليس من معاينة المتصفح.";return;}
+  if(prayerTimes)await schedulePrayerNotifications();else{await local.requestPermissions();document.getElementById("prayerStatus").textContent="تم طلب إذن الإشعارات. حدّد موقعك أولاً لجلب المواقيت ثم اضغط تفعيل الإشعارات مجدداً.";}
  }catch(e){document.getElementById("prayerStatus").textContent="تعذر تفعيل الإشعارات.";}
 };
 
