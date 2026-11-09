@@ -12,17 +12,17 @@ permissions = [
 ]
 for p in permissions:
     if p not in s:
-        s = s.replace("<application", p + "\\n    <application", 1)
+        s = s.replace("<application", p + "\n    <application", 1)
 service = '        <service android:name=".QuranPlaybackService" android:exported="false" android:foregroundServiceType="mediaPlayback" />'
 if "QuranPlaybackService" not in s:
-    s = s.replace("</application>", service + "\\n    </application>", 1)
+    s = s.replace("</application>", service + "\n    </application>", 1)
 manifest.write_text(s)
 
 gradle = root / "app/build.gradle"
 g = gradle.read_text()
 dep = "    implementation 'androidx.media:media:1.7.0'"
 if "androidx.media:media" not in g:
-    g = re.sub(r"(dependencies\\s*\\{)", r"\\1\\n" + dep, g, count=1)
+    g = re.sub(r"(dependencies\s*\{)", r"\1\n" + dep, g, count=1)
 gradle.write_text(g)
 
 java_dir = root / "app/src/main/java/com/sajad/quranalkareem"
@@ -53,7 +53,7 @@ public class QuranMediaPlugin extends Plugin {
   @Override public void load() {
     receiver = new BroadcastReceiver() {
       @Override public void onReceive(Context context, Intent intent) {
-        notifyListeners("mediaAction", new JSObject().put("action", intent.getStringExtra("action")));
+        JSObject data = new JSObject();\n        data.put("action", intent.getStringExtra("action"));\n        notifyListeners("mediaAction", data);
       }
     };
     IntentFilter filter = new IntentFilter("com.sajad.quranalkareem.MEDIA_ACTION");
@@ -70,7 +70,7 @@ public class QuranMediaPlugin extends Plugin {
   }
   @PluginMethod public void update(PluginCall call) {
     Intent i = new Intent(getContext(), QuranPlaybackService.class);
-    i.setAction("UPDATE");
+    i.setAction("PAUSE");
     i.putExtra("title", call.getString("title", "القرآن الكريم"));
     i.putExtra("artist", call.getString("artist", ""));
     getContext().startService(i);
@@ -110,8 +110,8 @@ public class QuranPlaybackService extends Service {
     session = new MediaSession(this, "QuranPlayback");
     session.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
     session.setCallback(new MediaSession.Callback() {
-      @Override public void onPlay() { playing = true; sendAction("PLAY"); updateNotification(); }
-      @Override public void onPause() { playing = false; sendAction("PAUSE"); updateNotification(); }
+      @Override public void onPlay() { playing = true; sendAction("PLAY"); updateState(); updateNotification(); }
+      @Override public void onPause() { playing = false; sendAction("PAUSE"); updateState(); updateNotification(); }
       @Override public void onSkipToNext() { sendAction("NEXT"); }
       @Override public void onStop() { playing = false; sendAction("STOP"); stopSelf(); }
     });
@@ -151,7 +151,7 @@ public class QuranPlaybackService extends Service {
     Intent i = new Intent(this, QuranPlaybackService.class).setAction(action);
     return PendingIntent.getService(this, request, i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
   }
-  private Notification buildNotification() {
+  private void updateNotification() { getSystemService(NotificationManager.class).notify(NOTIFICATION_ID, buildNotification()); }\n  private Notification buildNotification() {
     Intent launch = getPackageManager().getLaunchIntentForPackage(getPackageName());
     PendingIntent content = launch == null ? null : PendingIntent.getActivity(this, 0, launch, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     NotificationCompat.Builder b = new NotificationCompat.Builder(this, CHANNEL)
