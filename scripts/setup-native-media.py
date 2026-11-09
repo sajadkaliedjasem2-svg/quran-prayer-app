@@ -65,7 +65,7 @@ public class QuranMediaPlugin extends Plugin {
     receiver = new BroadcastReceiver() {
       @Override public void onReceive(Context context, Intent intent) {
         JSObject data = new JSObject();
-        try { data.put("action", intent.getStringExtra("action")); } catch (org.json.JSONException ignored) {}
+        data.put("action", intent.getStringExtra("action"));
         notifyListeners("mediaAction", data);
       }
     };
