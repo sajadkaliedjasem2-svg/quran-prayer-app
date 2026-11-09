@@ -222,6 +222,7 @@ async function bindQuranMediaActions(){
   await plugin.addListener("mediaAction",event=>{
    if(event.action==="PLAY"){if(quranPlayer.paused)quranPlayer.play().catch(()=>{});}
    else if(event.action==="PAUSE"){if(!quranPlayer.paused)quranPlayer.pause();}
+   else if(event.action==="PREVIOUS"){if(currentSurah>0)playSurah(currentSurah-1);}
    else if(event.action==="NEXT"){if(currentSurah<113)playSurah(currentSurah+1);}
    else if(event.action==="STOP"){quranPlayer.pause();quranPlayer.currentTime=0;}
   });
