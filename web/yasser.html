@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>القرآن الكريم - ياسر الدوسري</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:18px;background:#071a2f;color:#fff;font-family:Tahoma,Arial,sans-serif}
+header{position:sticky;top:0;background:#0b2742;padding:16px;border:1px solid #ffffff22;border-radius:16px;z-index:2}
+h1{font-size:21px;margin:0 0 12px;color:#f4d58d}input{width:100%;padding:13px;border-radius:12px;border:1px solid #ffffff33;background:#ffffff12;color:white;font-size:16px}
+#list{display:grid;gap:10px;margin-top:16px}.card{background:#ffffff0d;border:1px solid #ffffff20;border-radius:15px;padding:14px}
+.card h3{margin:0 0 10px;font-size:17px}.card audio{width:100%}.muted{color:#b8c9d8;font-size:13px}
+</style></head><body>
+<header><h1>تلاوات الشيخ ياسر الدوسري</h1><input id="search" type="search" placeholder="ابحث عن اسم السورة"><p id="status" class="muted">جارٍ تحميل أسماء السور...</p></header>
+<main id="list"></main>
+<script>
+const BASE='https://server11.mp3quran.net/download/yasser/';
+const list=document.getElementById('list'), search=document.getElementById('search'), status=document.getElementById('status');
+let cards=[];
+function pad(n){return String(n).padStart(3,'0')}
+function filterCards(){
+ const val=search.value.trim().toLocaleLowerCase('ar');
+ cards.forEach(card=>{card.hidden=!card.dataset.name.toLocaleLowerCase('ar').includes(val)});
+}
+async function init(){
+ try{
+  const response=await fetch('https://api.alquran.cloud/v1/surah');
+  if(!response.ok)throw new Error('network');
+  const json=await response.json();
+  const surahs=json.data||[];
+  list.replaceChildren();cards=[];
+  surahs.forEach(s=>{
+   const card=document.createElement('section');card.className='card';card.dataset.name=s.name;
+   const heading=document.createElement('h3');heading.textContent=s.number+' - '+s.name;
+   const meta=document.createElement('p');meta.className='muted';meta.textContent=s.revelationType==='Meccan'?'مكية':'مدنية';
+   const audio=document.createElement('audio');audio.controls=true;audio.preload='none';
+   audio.src=BASE+pad(s.number)+'.mp3';
+   card.append(heading,meta,audio);list.append(card);cards.push(card);
+   audio.addEventListener('play',()=>{document.querySelectorAll('audio').forEach(other=>{if(other!==audio){other.pause();other.currentTime=0}})});
+   audio.addEventListener('ended',()=>{
+    const next=cards[s.number];
+    if(next){const nextAudio=next.querySelector('audio');nextAudio.play().catch(()=>{});next.scrollIntoView({behavior:'smooth',block:'center'})}
+   });
+  });
+  status.textContent='تم تحميل '+surahs.length+' سورة';
+  filterCards();
+ }catch(e){status.textContent='تعذر تحميل أسماء السور. تحقق من الإنترنت ثم أعد تحميل الصفحة.'}
+}
+search.addEventListener('input',filterCards);
+init();
+</script></body></html>
