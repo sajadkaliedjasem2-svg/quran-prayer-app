@@ -123,7 +123,8 @@ public class QuranPlaybackService extends Service {
     session.setCallback(new MediaSessionCompat.Callback() {
       @Override public void onPlay() { playing = true; updateState(); sendAction("PLAY"); updateNotification(); }
       @Override public void onPause() { playing = false; updateState(); sendAction("PAUSE"); updateNotification(); }
-      @Override public void onSkipToPrevious() { sendAction("PREVIOUS"); }\n      @Override public void onSkipToNext() { sendAction("NEXT"); }
+      @Override public void onSkipToPrevious() { sendAction("PREVIOUS"); }
+      @Override public void onSkipToNext() { sendAction("NEXT"); }
       @Override public void onStop() { playing = false; sendAction("STOP"); stopForeground(true); stopSelf(); }
     });
     session.setActive(true);
