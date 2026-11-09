@@ -192,25 +192,44 @@ function renderSurahs(){
  filterSurahs();
 }
 function filterSurahs(){const v=document.getElementById("surahSearch").value.trim();document.querySelectorAll(".surah").forEach(x=>x.style.display=x.dataset.name.includes(v)?"flex":"none");}
-async function notifyQuranPlayback(){
- const r=reciters[currentReciter],body=`يُتلى الآن: ${r.name} — سورة ${surahs[currentSurah]}`;
- const local=window.Capacitor?.Plugins?.LocalNotifications;
- if(!local)return;
+async function syncQuranMediaState(){
+ const plugin=window.Capacitor?.Plugins?.QuranMedia;
+ if(!plugin)return;
  try{
-  let permission=await local.checkPermissions();
-  if(permission.display!=="granted")permission=await local.requestPermissions();
-  if(permission.display!=="granted")return;
-  try{await local.createChannel({id:"quran-playback",name:"إشعار التلاوة",description:"يعرض القارئ والسورة التي تعمل حالياً",importance:3,visibility:1,vibration:false});}catch(e){}
-  try{await local.cancel({notifications:[{id:9001}]});}catch(e){}
-  await local.schedule({notifications:[{id:9001,title:"القرآن الكريم",body,schedule:{at:new Date(Date.now()+700)},ongoing:true,autoCancel:false,channelId:"quran-playback"}]});
- }catch(e){console.warn("Playback notification unavailable",e);}
+  await plugin.update({title:"سورة "+surahs[currentSurah],artist:reciters[currentReciter].name});
+ }catch(e){console.warn("Native media notification update failed",e);}
 }
+async function startQuranMediaNotification(){
+ const plugin=window.Capacitor?.Plugins?.QuranMedia;
+ if(!plugin){document.getElementById("quranNow").textContent+=" — إشعار التحكم متاح في نسخة APK";return;}
+ try{
+  await plugin.start({title:"سورة "+surahs[currentSurah],artist:reciters[currentReciter].name});
+ }catch(e){console.warn("Native media notification unavailable",e);}
+}
+async function stopQuranMediaNotification(){
+ const plugin=window.Capacitor?.Plugins?.QuranMedia;
+ try{await plugin.stop();}catch(e){console.warn("Native media notification stop failed",e);}
+}
+async function bindQuranMediaActions(){
+ const plugin=window.Capacitor?.Plugins?.QuranMedia;
+ if(!plugin?.addListener)return;
+ try{
+  await plugin.addListener("mediaAction",event=>{
+   if(event.action==="PLAY"){if(quranPlayer.paused)quranPlayer.play().catch(()=>{});}
+   else if(event.action==="PAUSE"){if(!quranPlayer.paused)quranPlayer.pause();}
+   else if(event.action==="NEXT"){if(currentSurah<113)playSurah(currentSurah+1);}
+   else if(event.action==="STOP"){quranPlayer.pause();quranPlayer.currentTime=0;}
+  });
+ }catch(e){console.warn("Media controls listener unavailable",e);}
+}
+bindQuranMediaActions();
+
 function playSurah(i){currentSurah=i;const r=reciters[currentReciter];quranPlayer.src=r.base+String(i+1).padStart(3,"0")+".mp3";
  document.getElementById("quranNow").textContent=`يُتلى الآن: ${r.name} — سورة ${surahs[i]}`;
  quranPlayer.play().catch(()=>{document.getElementById("quranNow").textContent+=" (اضغط تشغيل إذا لم يبدأ تلقائياً)";});}
-quranPlayer.addEventListener("play",notifyQuranPlayback);
-quranPlayer.addEventListener("pause",()=>{if(!quranPlayer.ended){const local=window.Capacitor?.Plugins?.LocalNotifications;local?.cancel({notifications:[{id:9001}] }).catch(()=>{});}});
-quranPlayer.addEventListener("ended",()=>{if(currentSurah<113)playSurah(currentSurah+1);});
+quranPlayer.addEventListener("play",startQuranMediaNotification);
+quranPlayer.addEventListener("pause",()=>{if(!quranPlayer.ended){syncQuranMediaState();}});
+quranPlayer.addEventListener("ended",()=>{if(currentSurah<113)playSurah(currentSurah+1);else stopQuranMediaNotification();});
 document.getElementById("surahSearch").addEventListener("input",filterSurahs);
 document.querySelectorAll("[data-reciter]").forEach(b=>b.addEventListener("click",()=>{
  currentReciter=b.dataset.reciter;document.querySelectorAll("[data-reciter]").forEach(x=>x.classList.toggle("active",x===b));
