@@ -1,0 +1,1 @@
+Launcher icon source: the first custom Quran artwork generated for this project. The Android build converts this image into all launcher icon densities.
