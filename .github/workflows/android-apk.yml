@@ -23,6 +23,18 @@ jobs:
           cache: true
       - name: Create Android platform files
         run: flutter create --platforms=android --org com.noorquran .
+      - name: Configure Android internet permission and app title
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('android/app/src/main/AndroidManifest.xml')
+          s = p.read_text()
+          permission = '<uses-permission android:name="android.permission.INTERNET"/>'
+          if permission not in s:
+              s = s.replace('<manifest', '<manifest\\n    ' + permission, 1)
+          s = s.replace('android:label="quran_prayer_app"', 'android:label="القرآن الكريم"')
+          p.write_text(s)
+          PY
       - name: Get packages
         run: flutter pub get
       - name: Build APK
