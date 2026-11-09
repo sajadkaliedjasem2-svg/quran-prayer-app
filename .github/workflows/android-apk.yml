@@ -26,6 +26,10 @@ jobs:
         run: npx cap add android
       - name: Sync Capacitor plugins and original web app
         run: npx cap sync android
+      - name: Install image tooling and apply custom app icon
+        run: |
+          python3 -m pip install pillow
+          python3 scripts/apply-app-icon.py
       - name: Add exact alarm and location permissions
         run: |
           python3 - <<'PY'
