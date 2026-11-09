@@ -123,7 +123,7 @@ public class QuranPlaybackService extends Service {
     session.setCallback(new MediaSessionCompat.Callback() {
       @Override public void onPlay() { playing = true; updateState(); sendAction("PLAY"); updateNotification(); }
       @Override public void onPause() { playing = false; updateState(); sendAction("PAUSE"); updateNotification(); }
-      @Override public void onSkipToNext() { sendAction("NEXT"); }
+      @Override public void onSkipToPrevious() { sendAction("PREVIOUS"); }\n      @Override public void onSkipToNext() { sendAction("NEXT"); }
       @Override public void onStop() { playing = false; sendAction("STOP"); stopForeground(true); stopSelf(); }
     });
     session.setActive(true);
@@ -158,7 +158,7 @@ public class QuranPlaybackService extends Service {
 
   private void updateState() {
     long actions = PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PAUSE |
-      PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_STOP;
+      PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_STOP;
     PlaybackStateCompat state = new PlaybackStateCompat.Builder()
       .setActions(actions)
       .setState(playing ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
@@ -197,11 +197,12 @@ public class QuranPlaybackService extends Service {
       .setSmallIcon(android.R.drawable.ic_media_play)
       .setContentTitle(title).setContentText(artist)
       .setContentIntent(content).setOngoing(true).setOnlyAlertOnce(true)
+      .addAction(android.R.drawable.ic_media_previous, "السابق", serviceIntent("PREVIOUS", 0))
       .addAction(playing ? android.R.drawable.ic_media_pause : android.R.drawable.ic_media_play,
-        playing ? "إيقاف مؤقت" : "تشغيل", serviceIntent(playing ? "PAUSE" : "PLAY", 1))
+        playing ? "إيقاف" : "تشغيل", serviceIntent(playing ? "PAUSE" : "PLAY", 1))
       .addAction(android.R.drawable.ic_media_next, "التالي", serviceIntent("NEXT", 2))
       .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-        .setMediaSession(session.getSessionToken()).setShowActionsInCompactView(0, 1));
+        .setMediaSession(session.getSessionToken()).setShowActionsInCompactView(0, 1, 2));
     return builder.build();
   }
 
