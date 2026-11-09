@@ -10,16 +10,14 @@ class QuranOriginalApp extends StatelessWidget {
   const QuranOriginalApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'القرآن الكريم',
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF07131C),
-      ),
-      home: const OriginalInterface(),
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'القرآن الكريم',
+        theme: ThemeData.dark().copyWith(
+          scaffoldBackgroundColor: const Color(0xFF07131C),
+        ),
+        home: const OriginalInterface(),
+      );
 }
 
 class OriginalInterface extends StatefulWidget {
@@ -43,7 +41,8 @@ class _OriginalInterfaceState extends State<OriginalInterface> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (_) {
-            if (mounted) setState(() {
+            if (!mounted) return;
+            setState(() {
               loading = true;
               loadError = null;
             });
@@ -64,27 +63,9 @@ class _OriginalInterfaceState extends State<OriginalInterface> {
       ..loadFlutterAsset('assets/quran_alkareem_glass.html');
   }
 
-  Future<bool> _handleBack() async {
-    if (await controller.canGoBack()) {
-      await controller.goBack();
-      return false;
-    }
-    return true;
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, result) async {
-          if (!didPop && await controller.canGoBack()) {
-            await controller.goBack();
-          } else if (!didPop && mounted) {
-            // The HTML app handles its own section navigation.
-          }
-        },
+  Widget build(BuildContext context) => Directionality(
+        textDirection: TextDirection.rtl,
         child: Scaffold(
           body: SafeArea(
             child: Stack(
@@ -124,7 +105,5 @@ class _OriginalInterfaceState extends State<OriginalInterface> {
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
