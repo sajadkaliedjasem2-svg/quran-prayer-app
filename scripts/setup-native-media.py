@@ -97,16 +97,16 @@ import androidx.core.app.NotificationCompat;
 public class QuranPlaybackService extends Service {
   private static final String CHANNEL = "quran-media";
   private static final int NOTIFICATION_ID = 7310;
-  private MediaSession session;
+  private MediaSessionCompat session;
   private String title = "القرآن الكريم", artist = "";
   private boolean playing = true;
 
   @Override public void onCreate() {
     super.onCreate();
     createChannel();
-    session = new MediaSession(this, "QuranPlayback");
-    session.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
-    session.setCallback(new MediaSession.Callback() {
+    session = new MediaSessionCompat(this, "QuranPlayback");
+    session.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+    session.setCallback(new MediaSessionCompat.Callback() {
       @Override public void onPlay() { playing = true; updateState(); sendAction("PLAY"); updateNotification(); }
       @Override public void onPause() { playing = false; updateState(); sendAction("PAUSE"); updateNotification(); }
       @Override public void onSkipToNext() { sendAction("NEXT"); }
@@ -145,7 +145,7 @@ public class QuranPlaybackService extends Service {
   private void updateState() {
     long actions = PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PAUSE |
       PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_STOP;
-    PlaybackState state = new PlaybackState.Builder()
+    PlaybackStateCompat state = new PlaybackStateCompat.Builder()
       .setActions(actions)
       .setState(playing ? PlaybackState.STATE_PLAYING : PlaybackState.STATE_PAUSED,
         PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1f)
