@@ -303,7 +303,22 @@ async function schedulePrayerNotifications(){
  document.getElementById("prayerStatus").textContent="تم جدولة إشعارات الصلاة اليومية. صوت الأذان المختار يعمل عند التجربة وعند حلول الصلاة إذا كان التطبيق مفتوحاً.";
  return true;
 }
-function checkPrayerAlerts(){if(prayerTimes)updateNextPrayer();}
+function checkPrayerAlerts(){
+ if(!prayerTimes)return;
+ updateNextPrayer();
+ const now=new Date(),today=now.toDateString();
+ for(const [ar,en] of prayerNames.filter(x=>x[1]!=="Sunrise")){
+  const [hour,minute]=cleanTime(prayerTimes[en]).split(":").map(Number);
+  if(now.getHours()===hour&&now.getMinutes()===minute){
+   const key=today+"-"+en;
+   if(!notified.has(key)){
+    notified.add(key);
+    document.getElementById("prayerStatus").textContent="حان الآن وقت صلاة "+ar;
+    playAdhan();
+   }
+  }
+ }
+}
 document.getElementById("notifyBtn").onclick=async()=>{
  try{
   const local=window.Capacitor?.Plugins?.LocalNotifications;if(!local){document.getElementById("prayerStatus").textContent="إشعارات Android تحتاج نسخة التطبيق المثبتة.";return;}
