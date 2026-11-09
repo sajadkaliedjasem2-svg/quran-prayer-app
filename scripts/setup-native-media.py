@@ -29,11 +29,11 @@ wrapper = root / "gradle/wrapper/gradle-wrapper.properties"
 if not wrapper.exists():
     raise SystemExit("Gradle wrapper properties file is missing")
 props = wrapper.read_text()
-props = re.sub(r"gradle-[0-9.]+-all\\.zip", "gradle-8.11.1-bin.zip", props)
+props = re.sub(r"gradle-[0-9.]+-all\.zip", "gradle-8.11.1-bin.zip", props)
 if "networkTimeout=" in props:
-    props = re.sub(r"networkTimeout=\\d+", "networkTimeout=180000", props)
+    props = re.sub(r"networkTimeout=\d+", "networkTimeout=180000", props)
 else:
-    props += "\\nnetworkTimeout=180000\\n"
+    props += "\nnetworkTimeout=180000\n"
 wrapper.write_text(props)
 print("Configured Gradle wrapper: binary distribution, 180-second timeout")
 
