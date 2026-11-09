@@ -28,10 +28,11 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           p = Path('android/app/src/main/AndroidManifest.xml')
+          import re
           s = p.read_text()
           permission = '<uses-permission android:name="android.permission.INTERNET"/>'
           if permission not in s:
-              s = s.replace('<manifest', '<manifest\n    ' + permission, 1)
+              s = re.sub(r'(<manifest\\b[^>]*>)', r'\\1\\n    ' + permission, s, count=1)
           s = s.replace('android:label="quran_prayer_app"', 'android:label="القرآن الكريم"')
           p.write_text(s)
           PY
