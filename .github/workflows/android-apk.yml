@@ -26,6 +26,25 @@ jobs:
         run: npx cap add android
       - name: Sync Capacitor plugins and original web app
         run: npx cap sync android
+      - name: Add exact alarm permission
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("android/app/src/main/AndroidManifest.xml")
+          s = p.read_text()
+          permissions = [
+              '<uses-permission android:name="android.permission.INTERNET"/>',
+              '<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>',
+              '<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>'
+          ]
+          start = s.index('<manifest')
+          end = s.index('>', start) + 1
+          for permission in permissions:
+              if permission not in s:
+                  s = s[:end] + chr(10) + '    ' + permission + s[end:]
+                  end = s.index('>', s.index('<manifest')) + 1
+          p.write_text(s)
+          PY
       - name: Build debug APK
         working-directory: android
         run: ./gradlew assembleDebug
