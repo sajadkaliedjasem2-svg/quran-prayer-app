@@ -33,7 +33,7 @@ jobs:
           if permission not in s:
               start = s.index('<manifest')
               end = s.index('>', start) + 1
-              s = s[:end] + '\\n    ' + permission + s[end:]
+              s = s[:end] + chr(10) + '    ' + permission + s[end:]
           s = s.replace('android:label="quran_prayer_app"', 'android:label="القرآن الكريم"')
           p.write_text(s)
           PY
